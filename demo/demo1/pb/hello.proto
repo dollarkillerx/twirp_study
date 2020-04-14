@@ -3,7 +3,7 @@ package hello;
 option go_package = ".;helloworld";  // Go 中：默认使用package名作为包名，除非指定了option go_package选项 (protoc-gen-go的未来版本将要求指定此内容)
 
 message HelloResp {
-  string Body = 2;
+  string Body = 1;
 }
 
 message HelloReq {
