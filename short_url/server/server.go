@@ -9,15 +9,14 @@ import (
 )
 
 var (
-	dbProxy string
+	dbProxy = "http://0.0.0.0:8081"
 )
 
 func init() {
 	gp := os.Getenv("DBPROXY")
-	if gp == "" {
-		dbProxy = "0.0.0.0:8081"
+	if gp != "" {
+		dbProxy = gp
 	}
-	dbProxy = gp
 }
 
 type ShortUrl struct {

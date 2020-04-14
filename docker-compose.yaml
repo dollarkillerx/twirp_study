@@ -1,0 +1,39 @@
+version: "3.7"
+
+services:
+  dbproxy:
+    build:
+      context: .
+      dockerfile: dbproxy.dockerfile
+    environment:
+      PGURI: host=192.168.109.128 port=5432 user=postgres dbname=postgres password=root sslmode=disable
+      DBPROXY_ADDR: 0.0.0.0:8081
+    ports:
+      - 8001:8081
+
+  shorturl:
+    build:
+      context: .
+      dockerfile: shorturl.dockerfile
+    environment:
+      SHORTURL_ADDR: 0.0.0.0:8082
+      DBPROXY: http://0.0.0.0:8081
+    depends_on:
+      - dbproxy
+    ports:
+      - 8002:8082
+
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway.dockerfile
+    depends_on:
+      - dbproxy
+      - shorturl
+    environment:
+      GATEWAYADDR: 0.0.0.0:8085
+      SHORTURL: http://0.0.0.0:8082
+    ports:
+      - 8005:8085
+
+

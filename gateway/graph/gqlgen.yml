@@ -1,0 +1,22 @@
+schema:
+  - graph/*.graphqls
+
+exec:
+  filename: graph/generated/generated.go
+  package: generated
+
+model:
+  filename: graph/model/models_gen.go
+  package: model
+
+resolver:
+  filename: graph/resolver.go
+
+
+models:
+  Key:
+    model:
+      - twirp/pb.ParsingKey
+  Url:
+    model:
+      - twirp/pb.ParsingUrl

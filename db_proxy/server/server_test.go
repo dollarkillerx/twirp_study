@@ -30,7 +30,7 @@ func TestDbProxy_AddUrl(t *testing.T) {
 
 func TestDbProxy_GetUrl(t *testing.T) {
 	proxy := DbProxy{}
-	url, err := proxy.GetUrl(context.TODO(), &pb.GetUrlReq{Key: "zz"})
+	url, err := proxy.GetUrl(context.TODO(), &pb.GetUrlReq{Key: "47f5f"})
 	if err != nil {
 		log.Fatalln(err)
 	}

@@ -1,0 +1,21 @@
+input NewUrl {
+    url: String!
+}
+
+type Key {
+    key: String!
+}
+
+type Url {
+    url: String!
+}
+
+type Mutation {
+    addUrl(input: NewUrl): Key!
+}
+
+type Query {
+    getUrl(key: String!): Url!
+}
+
+
