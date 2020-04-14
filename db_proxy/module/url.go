@@ -7,4 +7,3 @@ type Url struct {
 	Key string `gorm:"key"`
 	Url string `gorm:"url"`
 }
-

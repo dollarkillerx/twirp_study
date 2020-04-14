@@ -15,6 +15,6 @@ func main() {
 	}
 	server := pb.NewShortUrlServer(&server.ShortUrl{}, nil)
 	mux := http.NewServeMux()
-	mux.Handle(server.PathPrefix(),server)
-	log.Fatalln(http.ListenAndServe(addr,server))
+	mux.Handle(server.PathPrefix(), server)
+	log.Fatalln(http.ListenAndServe(addr, server))
 }

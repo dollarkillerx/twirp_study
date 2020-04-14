@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"os"
+	"twirp/db_proxy"
 	"twirp/pb"
 	"twirp/utils"
 )
@@ -20,15 +21,54 @@ func init() {
 }
 
 type ShortUrl struct {
-
 }
 
-func Parsing(ctx context.Context,req *pb.ParsingUrl) (*pb.ParsingKey,error) {
+func (s *ShortUrl) Parsing(ctx context.Context, req *pb.ParsingUrl) (*pb.ParsingKey, error) {
 	encode := utils.Md5Encode(req.Url)
-	return nil, nil
+	client := db_proxy.NewClient(dbProxy)
+
+	ex, err := client.CheckUrlEx(ctx, &pb.CheckUrlExReq{Url: req.Url})
+	if err != nil {
+		return nil, err
+	}
+
+	if ex.Key != "" {
+		return &pb.ParsingKey{
+			Key: ex.Key,
+		}, nil
+	}
+
+	// First appearance
+	k := ""
+	idx := 5
+	for {
+		k = encode[:idx]
+		url, err := client.GetUrl(ctx, &pb.GetUrlReq{
+			Key: k,
+		})
+		if err != nil {
+			return nil, err
+		}
+		if url.Addr != "" {
+			idx++
+			continue
+		}
+		break
+	}
+
+	_, err = client.AddUrl(ctx, &pb.UrlReq{Key: k, Url: req.Url})
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ParsingKey{Key: k}, nil
 }
 
-func UnParsing(ctx context.Context,req *pb.ParsingKey) (*pb.ParsingUrl,error) {
+func (s *ShortUrl) UnParsing(ctx context.Context, req *pb.ParsingKey) (*pb.ParsingUrl, error) {
+	client := db_proxy.NewClient(dbProxy)
+	url, err := client.GetUrl(ctx, &pb.GetUrlReq{Key: req.Key})
+	if err != nil {
+		return nil, err
+	}
 
-	return nil, nil
+	return &pb.ParsingUrl{Url: url.Addr}, nil
 }

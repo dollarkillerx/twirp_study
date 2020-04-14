@@ -5,9 +5,8 @@ import (
 	"twirp/pb"
 )
 
-func NewClient(addr string) (pb.DbProxy,error) {
-	client := pb.NewDbProxyProtobufClient(addr, &http.Client{})
-	return client,nil
+func NewClient(addr string) pb.DbProxy {
+	return pb.NewDbProxyProtobufClient(addr, &http.Client{})
 }
 
 //func NewClient(addr string,token string) (pb.DbProxy,error) {
@@ -25,4 +24,3 @@ func NewClient(addr string) (pb.DbProxy,error) {
 //	}
 //	return client,nil
 //}
-

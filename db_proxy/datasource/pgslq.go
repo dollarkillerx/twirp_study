@@ -19,7 +19,6 @@ func init() {
 		//log.Fatalln("pgsql uri is null")
 	}
 
-
 	// host=0.0.0.0 port=5432 user=postgres dbname=postgres password=root sslmode=disable
 	// docker run --name postgres --restart=always -e POSTGRES_PASSWORD=root -d -p5432 postgres
 	db, err := gorm.Open("postgres", uri)
