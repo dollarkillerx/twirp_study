@@ -1,0 +1,48 @@
+syntax = "proto3";
+package pb;
+option go_package = ".;pb";
+
+// 服务注册
+message RegistryReq {
+  string id = 1;
+  string server = 2;
+  string addr = 3;
+}
+
+message RegistryResp {
+  string id = 1;
+  bool success = 2;
+}
+
+message HeartbeatReq {
+  string id = 1;
+  string server = 2;
+  int32 load = 3; // 服务负载
+}
+
+message HeartbeatResp {
+}
+
+message Server {
+  string id = 1;
+  string server = 2;
+  string addr = 3;
+  int32 load = 4;
+  int64 timeout = 5;
+}
+
+// 服务发现
+message DiscoveryReq {
+  string server = 1;
+}
+
+message DiscoveryResp {
+  repeated Server servers = 1;
+}
+
+service Discovery {
+  rpc Registry(RegistryReq) returns (RegistryResp);
+  rpc Heartbeat(HeartbeatReq) returns(HeartbeatResp);
+  rpc Discovery(DiscoveryReq) returns (DiscoveryResp);
+}
+
