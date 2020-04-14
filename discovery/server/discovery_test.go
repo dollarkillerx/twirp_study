@@ -13,6 +13,6 @@ func TestTime(t *testing.T) {
 	if add > now {
 		fmt.Println("Success")
 	}
-	fmt.Println("Add: ",add)
-	fmt.Println("Now: ",now)
+	fmt.Println("Add: ", add)
+	fmt.Println("Now: ", now)
 }

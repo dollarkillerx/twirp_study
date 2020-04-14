@@ -1,0 +1,17 @@
+syntax = "proto3";
+package pb;
+option go_package = "pb";
+
+message ParsingUrl {
+  string url =1;
+}
+
+message ParsingKey {
+  string key = 1;
+}
+
+service ShortUrl {
+  rpc Parsing(ParsingUrl) returns (ParsingKey);
+  rpc UnParsing(ParsingKey) returns (ParsingUrl);
+}
+

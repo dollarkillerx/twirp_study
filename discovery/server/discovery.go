@@ -11,7 +11,7 @@ import (
 
 type Discovery struct {
 	dbMu sync.Mutex
-	db map[string][]*pb.Server
+	db   map[string][]*pb.Server
 }
 
 func New() *Discovery {
@@ -20,45 +20,44 @@ func New() *Discovery {
 	}
 }
 
-func (d *Discovery) Registry(ctx context.Context,req *pb.RegistryReq) (*pb.RegistryResp,error) {
+func (d *Discovery) Registry(ctx context.Context, req *pb.RegistryReq) (*pb.RegistryResp, error) {
 	id := utils.RandId()
 	d.dbMu.Lock()
 	defer d.dbMu.Unlock()
-	ki: // 使用了万恶的goto
-	it,ex := d.db[req.Server]
+ki: // 使用了万恶的goto
+	it, ex := d.db[req.Server]
 	if !ex {
-		d.db[req.Server] = make([]*pb.Server,0)
+		d.db[req.Server] = make([]*pb.Server, 0)
 		goto ki
 	}
 	resp := &pb.RegistryResp{
-		Id: id,
+		Id:      id,
 		Success: true,
 	}
-	it = append(it,&pb.Server{
-		Id: id,
-		Server: req.Server,
-		Addr: req.Addr,
-		Load: 0,
+	it = append(it, &pb.Server{
+		Id:      id,
+		Server:  req.Server,
+		Addr:    req.Addr,
+		Load:    0,
 		Timeout: time.Now().Add(time.Second).Unix(),
 	})
 	d.db[req.Server] = it
 	return resp, nil
 }
 
-
-func (d *Discovery) Discovery(ctx context.Context,req *pb.DiscoveryReq) (*pb.DiscoveryResp,error) {
-	resp := &pb.DiscoveryResp{Servers: make([]*pb.Server,0)}
+func (d *Discovery) Discovery(ctx context.Context, req *pb.DiscoveryReq) (*pb.DiscoveryResp, error) {
+	resp := &pb.DiscoveryResp{Servers: make([]*pb.Server, 0)}
 	d.dbMu.Lock()
 	defer d.dbMu.Unlock()
-	servers,ex := d.db[req.Server]
+	servers, ex := d.db[req.Server]
 	if !ex {
 		return resp, nil
 	}
 
 	now := time.Now().Unix()
-	for _,v := range servers {
+	for _, v := range servers {
 		if v.Timeout > now {
-			resp.Servers = append(resp.Servers,v)
+			resp.Servers = append(resp.Servers, v)
 		}
 	}
 
@@ -70,21 +69,21 @@ func (d *Discovery) Discovery(ctx context.Context,req *pb.DiscoveryReq) (*pb.Dis
 	return resp, nil
 }
 
-func (d *Discovery) Heartbeat(ctx context.Context,req *pb.HeartbeatReq) (*pb.HeartbeatResp,error) {
+func (d *Discovery) Heartbeat(ctx context.Context, req *pb.HeartbeatReq) (*pb.HeartbeatResp, error) {
 	d.dbMu.Lock()
 	defer d.dbMu.Unlock()
-	servers,ex := d.db[req.Server]
+	servers, ex := d.db[req.Server]
 	if !ex {
-		return nil,define.DiscoveryIsNull
+		return nil, define.DiscoveryIsNull
 	}
 
-	su := make([]*pb.Server,0)
-	for _,v := range servers {
+	su := make([]*pb.Server, 0)
+	for _, v := range servers {
 		if v.Id == req.Id {
-			v.Timeout =  time.Now().Add(time.Second).Unix()
+			v.Timeout = time.Now().Add(time.Second).Unix()
 			v.Load = req.Load
 		}
-		su = append(su,v)
+		su = append(su, v)
 	}
 
 	// 太懒了 就这样实现把

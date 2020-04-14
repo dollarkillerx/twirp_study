@@ -1,0 +1,34 @@
+syntax = "proto3";
+package pb;
+option go_package = "pb";
+
+message UrlReq {
+  string key = 1;
+  string url = 2;
+}
+
+message UrlResp {
+  bool success = 1;
+}
+
+message CheckUrlExReq {
+  string url = 1;
+}
+
+message CheckUrlExResp {
+  string key = 1;
+}
+
+message GetUrlReq {
+  string key = 1;
+}
+
+message GetUrlResp {
+  string addr = 1;
+}
+
+service DbProxy {
+  rpc AddUrl(UrlReq) returns (UrlResp);
+  rpc CheckUrlEx(CheckUrlExReq) returns (CheckUrlExResp);
+  rpc GetUrl(GetUrlReq) returns(GetUrlResp);
+}
