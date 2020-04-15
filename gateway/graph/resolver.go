@@ -32,8 +32,11 @@ func (r *mutationResolver) AddURL(ctx context.Context, input *model.NewURL) (*pb
 	parsing, err := client.Parsing(ctx, &pb.ParsingUrl{
 		Url: input.URL,
 	})
+	if err != nil {
+		return nil,err
+	}
 	parsing.Key = fmt.Sprintf("%s/%s", r.Addr, parsing.Key)
-	return parsing, err
+	return parsing, nil
 }
 
 func (r *queryResolver) GetURL(ctx context.Context, key string) (*pb.ParsingUrl, error) {

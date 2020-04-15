@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/99designs/gqlgen/graphql/handler"
 	"log"
 	"net/http"
 	"strings"
@@ -11,17 +10,7 @@ import (
 
 func TestHand_ServeHTTP(t *testing.T) {
 	log.Println("Success")
-	log.Fatalln(http.ListenAndServe("0.0.0.0:8085", &Router{}))
-}
-
-type Router struct {
-	html  http.HandlerFunc
-	query *handler.Server
-}
-
-func (h *Router) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
-	resp.Header().Set("Location", "http://baidu.com")
-	resp.WriteHeader(302)
+	log.Fatalln(http.ListenAndServe("0.0.0.0:8085", &router{}))
 }
 
 func TestPath(t *testing.T) {

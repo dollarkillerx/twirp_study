@@ -48,6 +48,10 @@ func (h *router) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 		h.query.ServeHTTP(resp, req)
 	default:
 		split := strings.Split(baseUrl, "/")
+		if len(split) != 1 {
+			resp.WriteHeader(404)
+			return
+		}
 		key := split[0]
 		client := short_url.NewClient(graph.ShortUrl)
 		parsing, err := client.UnParsing(context.TODO(), &pb.ParsingKey{
