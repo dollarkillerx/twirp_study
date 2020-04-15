@@ -13,13 +13,13 @@ import (
 )
 
 var (
-	shortUrl = "http://0.0.0.0:8082"
+	ShortUrl = "http://0.0.0.0:8082"
 )
 
 func init() {
 	addr := os.Getenv("SHORTURL")
 	if addr != "" {
-		shortUrl = addr
+		ShortUrl = addr
 	}
 }
 
@@ -28,7 +28,7 @@ type Resolver struct {
 }
 
 func (r *mutationResolver) AddURL(ctx context.Context, input *model.NewURL) (*pb.ParsingKey, error) {
-	client := short_url.NewClient(shortUrl)
+	client := short_url.NewClient(ShortUrl)
 	parsing, err := client.Parsing(ctx, &pb.ParsingUrl{
 		Url: input.URL,
 	})
@@ -37,7 +37,7 @@ func (r *mutationResolver) AddURL(ctx context.Context, input *model.NewURL) (*pb
 }
 
 func (r *queryResolver) GetURL(ctx context.Context, key string) (*pb.ParsingUrl, error) {
-	client := short_url.NewClient(shortUrl)
+	client := short_url.NewClient(ShortUrl)
 	return client.UnParsing(ctx, &pb.ParsingKey{Key: key})
 }
 
