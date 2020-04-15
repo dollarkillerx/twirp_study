@@ -23,13 +23,14 @@ type ShortUrl struct {
 }
 
 func (s *ShortUrl) Parsing(ctx context.Context, req *pb.ParsingUrl) (*pb.ParsingKey, error) {
-	encode := utils.Md5Encode(req.Url)
 	client := db_proxy.NewClient(dbProxy)
 
 	ex, err := client.CheckUrlEx(ctx, &pb.CheckUrlExReq{Url: req.Url})
 	if err != nil {
 		return nil, err
 	}
+
+	encode := utils.Md5Encode(req.Url)
 
 	if ex.Key != "" {
 		return &pb.ParsingKey{

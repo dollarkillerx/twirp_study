@@ -33,7 +33,7 @@ func (r *mutationResolver) AddURL(ctx context.Context, input *model.NewURL) (*pb
 		Url: input.URL,
 	})
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	parsing.Key = fmt.Sprintf("%s/%s", r.Addr, parsing.Key)
 	return parsing, nil

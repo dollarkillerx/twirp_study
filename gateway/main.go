@@ -24,6 +24,7 @@ func main() {
 		Addr: fmt.Sprintf("http://%s", addr),
 	}}))
 
+
 	//http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	//http.Handle("/query", srv)
 
